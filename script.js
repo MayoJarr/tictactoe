@@ -18,6 +18,8 @@ const Player = (sign) => {
 
 const DisplayController = (() => {
     const items = document.querySelectorAll(".item");
+    const gameBox = document.querySelector('.game');
+    const header = document.querySelector('header');
 
     const render = () => {
         items.forEach((item, index) => {
@@ -29,7 +31,11 @@ const DisplayController = (() => {
             Game.startRound(element.dataset.number);
         });
     });
-    return { render, items };
+    const showMenu = (winner) => {
+        gameBox.style.cssText = "display: none;"
+        header.textContent = winner;
+    }
+    return { render, items, showMenu };
 })();
 const Game = (() => {
     ar = GameBoard.array;
@@ -49,7 +55,7 @@ const Game = (() => {
         else if (ar[3] === s && ar[4] === s && ar[5] === s) return true;
         else if (ar[6] === s && ar[7] === s && ar[8] === s) return true;
         else if (ar[0] === s && ar[3] === s && ar[6] === s) return true;
-        else if (ar[1] === s && ar[4] === s && ar[5] === s) return true;
+        else if (ar[1] === s && ar[4] === s && ar[7] === s) return true;
         else if (ar[2] === s && ar[5] === s && ar[8] === s) return true;
         else if (ar[0] === s && ar[4] === s && ar[8] === s) return true;
         else if (ar[2] === s && ar[4] === s && ar[6] === s) return true;
@@ -65,7 +71,10 @@ const Game = (() => {
     const endRound = (s) => {
         if (round === 9) console.log('draw')
         else if (checkIfWin(s) === false) return
-        else if (checkIfWin(s) === true) console.log(`${s} wins`)
+        else if (checkIfWin(s) === true) {
+            console.log(`${s} wins`)
+            DisplayController.showMenu(`${s} wins`);
+        }
         
     }
 
