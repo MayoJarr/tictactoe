@@ -11,8 +11,7 @@ const GameBoard = (() => {
 })();
 
 const Player = (sign) => {
-    this.sign = sign;
-    const getPlayerSign = sign;
+    const getPlayerSign = () =>  sign;
     return { getPlayerSign };
 };
 
@@ -20,6 +19,7 @@ const DisplayController = (() => {
     const items = document.querySelectorAll(".item");
     const gameBox = document.querySelector('.game');
     const header = document.querySelector('header');
+    const menu = document.querySelector('.menu');
 
     const render = () => {
         items.forEach((item, index) => {
@@ -31,11 +31,20 @@ const DisplayController = (() => {
             Game.startRound(element.dataset.number);
         });
     });
-    const showMenu = (winner) => {
-        gameBox.style.cssText = "display: none;"
-        header.textContent = winner;
+    const createReset = () => {
+        const reset = document.createElement('button');
+        reset.textContent = "reset";
+        reset.classList.add('resetB');        
+        menu.appendChild(reset);
+        reset.addEventListener('click', GameBoard.reset())
     }
-    return { render, items, showMenu };
+    const showMenu = (winner) => {
+        menu.textContent = winner
+        menu.style.cssText = "top: 15px; opacity: 1; transform(scale(1.2));";
+        createReset()
+        // gameBox.style.cssText = "display: none;"
+     }
+    return { render, showMenu };
 })();
 const Game = (() => {
     ar = GameBoard.array;
@@ -63,13 +72,13 @@ const Game = (() => {
     };
     const startRound = (place) => {
         round++;
-        if (round % 2 === 1) addMark(place, "x");
-        else if (round % 2 === 0) addMark(place, "o");
+        if (round % 2 === 1) addMark(place, playerX.getPlayerSign());
+        else if (round % 2 === 0) addMark(place, playerO.getPlayerSign());
         endRound('x')
         endRound('o')
     };
     const endRound = (s) => {
-        if (round === 9) console.log('draw')
+        if (round === 9) DisplayController.showMenu(`Draw!`);
         else if (checkIfWin(s) === false) return
         else if (checkIfWin(s) === true) {
             console.log(`${s} wins`)
