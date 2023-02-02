@@ -2,12 +2,7 @@ const GameBoard = (() => {
     // board
     let array = ["", "", "", "", "", "", "", "", ""];
     // let array =[];
-    const reset = () => {
-        array = ["", "", "", "", "", "", "", "", ""];
-        console.log(array);
-        DisplayController.render();
-    };
-    return { array, reset };
+    return { array };
 })();
 
 const Player = (sign) => {
@@ -20,44 +15,48 @@ const DisplayController = (() => {
     const gameBox = document.querySelector('.game');
     const header = document.querySelector('header');
     const menu = document.querySelector('.menu');
-
+    const resetB = document.querySelector('.resetB');
+    const menuText = document.querySelector('.menuText');
     const render = () => {
         items.forEach((item, index) => {
             item.textContent = GameBoard.array[index];
         });
     };
+    const resetItems = (item) => {
+        items.forEach(item => {
+            item.textContent = '';
+        });
+    }
     items.forEach((element) => {
         element.addEventListener("click", () => {
             Game.startRound(element.dataset.number);
         });
     });
-    const createReset = () => {
-        const reset = document.createElement('button');
-        reset.textContent = "reset";
-        reset.classList.add('resetB');        
-        menu.appendChild(reset);
-        reset.addEventListener('click', GameBoard.reset())
-    }
+    resetB.addEventListener('click', () => {
+        hideMenu();
+        resetItems();
+        Game.resetRound();
+    });
     const showMenu = (winner) => {
-        menu.textContent = winner
+        menuText.textContent = winner
         menu.style.cssText = "top: 15px; opacity: 1; transform(scale(1.2));";
-        createReset()
-        // gameBox.style.cssText = "display: none;"
+     }
+    const hideMenu = (winner) => {
+        menuText.textContent = winner
+        menu.style.cssText = "top: -300px; opacity: 0; transform(scale(1));";
      }
     return { render, showMenu };
 })();
 const Game = (() => {
-    ar = GameBoard.array;
+    let ar = GameBoard.array;
     let playerX = Player("x");
     let playerO = Player("o");
     let round = 0;
     const addMark = (place, sign) => {
-        if (ar[place - 1] === "x" || ar[place - 1] === "o") return;
-        else if (ar[place - 1] === "") {
-            ar.splice(place - 1, 1);
-            ar.splice(place - 1, 0, sign);
-            DisplayController.render();
-        }
+        console.log(ar);
+        ar.splice(place - 1, 1);
+        ar.splice(place - 1, 0, sign);
+        DisplayController.render();
     };
     const checkIfWin = (s) => {
         if (ar[0] === s && ar[1] === s && ar[2] === s) return true;
@@ -70,12 +69,20 @@ const Game = (() => {
         else if (ar[2] === s && ar[4] === s && ar[6] === s) return true;
         else return false;
     };
+    const resetRound = () => {
+        round = 0;
+        ar = ["", "", "", "", "", "", "", "", ""];
+        console.log(ar);
+    }
     const startRound = (place) => {
-        round++;
-        if (round % 2 === 1) addMark(place, playerX.getPlayerSign());
-        else if (round % 2 === 0) addMark(place, playerO.getPlayerSign());
-        endRound('x')
-        endRound('o')
+        if (ar[place - 1] === "x" || ar[place - 1] === "o") return;
+        else if (ar[place - 1] === "") {
+            round++;
+            if (round % 2 === 1) addMark(place, playerX.getPlayerSign());
+            else if (round % 2 === 0) addMark(place, playerO.getPlayerSign());
+            endRound('x')
+            endRound('o')
+        }
     };
     const endRound = (s) => {
         if (round === 9) DisplayController.showMenu(`Draw!`);
@@ -84,8 +91,6 @@ const Game = (() => {
             console.log(`${s} wins`)
             DisplayController.showMenu(`${s} wins`);
         }
-        
     }
-
-    return { checkIfWin, startRound };
+    return { checkIfWin, startRound, resetRound };
 })();
