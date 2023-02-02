@@ -21,9 +21,9 @@ body {
 .item {
     color:#7e498a;
     border: 1px solid #fff;
-    font-size: 50px;
+    font-size: 70px;
     text-align: center;
-    padding: 20px;
+    padding: 15px;
 }
 header{
     background: #7e498a;
@@ -49,7 +49,16 @@ header{
     justify-content: space-around;
     align-items: center;
 }
+.item:hover{
+    background: #1f1f1f;
+}
 .resetB{
     width: 100px;
     height: 50px;
+    border: none;
+    font-size: 20px;
+    transition: .5s
+}
+.resetB:hover{
+    transform: scale(1.2);
 }
