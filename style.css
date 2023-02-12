@@ -20,7 +20,7 @@ body {
 }
 .item {
     color:#7e498a;
-    border: 1px solid #fff;
+    border: 1px solid #7e498a;
     font-size: 70px;
     text-align: center;
     padding: 15px;
@@ -61,4 +61,36 @@ header{
 }
 .resetB:hover{
     transform: scale(1.2);
+}
+.bu{
+    border: none;
+    background: #7e498a;
+    padding: 10px;
+}
+.bu:hover{
+    background:#6e397a;
+}
+.bu:active{
+    background:#5e296a;
+}
+.greeting{
+    position: absolute;
+    background: black;
+    transition: .7s;
+    z-index: 2;
+    width: 300px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    transform-origin: center center;
+    margin: 0 auto;
+}
+.flexbox{
+    position: absolute;
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
